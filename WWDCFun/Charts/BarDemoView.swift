@@ -49,24 +49,12 @@ var bolellaData = [
     BallmerDataPoint(skill: 1.0, bac: 0.26)
 ]
 
-struct ProgrammerData: Identifiable {
-    let name: String
-    let data: [BallmerDataPoint]
-    
-    var id: String { name }
-}
-
-var programmersData: [Programmer] = [
-    ProgrammerData(name: "Ballmer", data: ballmerData),
-    ProgrammerData(name: "Bolella", data: bolellaData)
-]
-
 enum ChartStyle {
     case bar, line, area, point
 }
 
 enum Programmer {
-    case ballmer, bolella, both
+    case ballmer, bolella
 }
 
 struct BarDemoView: View {
@@ -84,9 +72,6 @@ struct BarDemoView: View {
             return ballmerData
         case .bolella:
             return bolellaData
-        case .both:
-            return []
-        }
     }
     
     var body: some View {
@@ -95,7 +80,6 @@ struct BarDemoView: View {
                 Picker("Programmer", selection: $selectedProgrammer.animation(.easeInOut)) {
                     Text("Ballmer").tag(Programmer.ballmer)
                     Text("Bolella").tag(Programmer.bolella)
-                    Text("Both").tag(Programmer.both)
                 }
                 .pickerStyle(.segmented)
                 Picker("Chart Style", selection: $selectedChartStyle.animation(.easeInOut)) {
@@ -114,69 +98,38 @@ struct BarDemoView: View {
             VStack {
                 Text("🍺 Ballmer's Peak 🍺")
                     .font(.title)
-                if(selectedProgrammer != .both) {
-                    Chart(data) { ballmerDataPoint in
-                        switch selectedChartStyle {
-                        case .bar:
-                            BarMark(
-                                x: .value("BAC", ballmerDataPoint.bac),
-                                y: .value("Programming Skill", ballmerDataPoint.skill))
-                        case .line:
-                            LineMark(
-                                x: .value("BAC", ballmerDataPoint.bac),
-                                y: .value("Programming Skill", ballmerDataPoint.skill))
-                        case .area:
-                            AreaMark(
-                                x: .value("BAC", ballmerDataPoint.bac),
-                                y: .value("Programming Skill", ballmerDataPoint.skill))
-                        case .point:
-                            PointMark(
-                                x: .value("BAC", ballmerDataPoint.bac),
-                                y: .value("Programming Skill", ballmerDataPoint.skill))
-                        }
-                        if(pointOn && isPointNotSelected){
-                            PointMark(
-                                x: .value("BAC", ballmerDataPoint.bac),
-                                y: .value("Programming Skill", ballmerDataPoint.skill))
-                        }
+                Chart(data) { ballmerDataPoint in
+                    switch selectedChartStyle {
+                    case .bar:
+                        BarMark(
+                            x: .value("BAC", ballmerDataPoint.bac),
+                            y: .value("Programming Skill", ballmerDataPoint.skill))
+                    case .line:
+                        LineMark(
+                            x: .value("BAC", ballmerDataPoint.bac),
+                            y: .value("Programming Skill", ballmerDataPoint.skill))
+                    case .area:
+                        AreaMark(
+                            x: .value("BAC", ballmerDataPoint.bac),
+                            y: .value("Programming Skill", ballmerDataPoint.skill))
+                    case .point:
+                        PointMark(
+                            x: .value("BAC", ballmerDataPoint.bac),
+                            y: .value("Programming Skill", ballmerDataPoint.skill))
                     }
-                    .aspectRatio(contentMode: .fit)
-                } else {
-                    Chart(programmersData) { ballmerData in
-                        ForEach(ballmerData.data) { ballmerDataPoint in
-                            
-                            switch selectedChartStyle {
-                            case .bar:
-                                BarMark(
-                                    x: .value("BAC", ballmerDataPoint.bac),
-                                    y: .value("Programming Skill", ballmerDataPoint.skill))
-                            case .line:
-                                LineMark(
-                                    x: .value("BAC", ballmerDataPoint.bac),
-                                    y: .value("Programming Skill", ballmerDataPoint.skill))
-                            case .area:
-                                AreaMark(
-                                    x: .value("BAC", ballmerDataPoint.bac),
-                                    y: .value("Programming Skill", ballmerDataPoint.skill))
-                            case .point:
-                                PointMark(
-                                    x: .value("BAC", ballmerDataPoint.bac),
-                                    y: .value("Programming Skill", ballmerDataPoint.skill))
-                            }
-                            if(pointOn && isPointNotSelected){
-                                PointMark(
-                                    x: .value("BAC", ballmerDataPoint.bac),
-                                    y: .value("Programming Skill", ballmerDataPoint.skill))
-                            }
-                        }
+                    if(pointOn && isPointNotSelected){
+                        PointMark(
+                            x: .value("BAC", ballmerDataPoint.bac),
+                            y: .value("Programming Skill", ballmerDataPoint.skill))
                     }
-                    .aspectRatio(contentMode: .fit)
                 }
+                .aspectRatio(contentMode: .fit)
             }
         }
         .padding(.all)
     }
 }
+    
 
 struct BarDemoView_Previews: PreviewProvider {
     static var previews: some View {
