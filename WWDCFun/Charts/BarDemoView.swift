@@ -58,11 +58,10 @@ struct BarDemoView: View {
                     Toggle(isOn: $pointOn.animation()) {
                         Text("PointMark")
                     }
+                    .toggleStyle(.button)
                 }
             }
-            VStack {
-                Text("🍺 Ballmer's Peak 🍺")
-                    .font(.title)
+            GroupBox("Ballmer's Peak 🍺") {
                 switch selectedViewStyle {
                 case .single:
                     SingleBallmerChartView(selectedProgrammer: selectedProgrammer,
@@ -74,6 +73,20 @@ struct BarDemoView: View {
                                            showPoint: showPoint)
                 }
             }
+//            VStack {
+//                Text("🍺 Ballmer's Peak 🍺")
+//                    .font(.title)
+//                switch selectedViewStyle {
+//                case .single:
+//                    SingleBallmerChartView(selectedProgrammer: selectedProgrammer,
+//                                           selectedChartStyle: selectedChartStyle,
+//                                           showPoint: showPoint)
+//                case .multi:
+//                    MultiBallmerChartView(selectedProgrammer: selectedProgrammer,
+//                                           selectedChartStyle: selectedChartStyle,
+//                                           showPoint: showPoint)
+//                }
+//            }
         }
         .padding(.all)
     }
@@ -83,43 +96,69 @@ struct SingleBallmerChartView: View {
     let selectedProgrammer: Programmer
     let selectedChartStyle: ChartStyle
     let showPoint: Bool
+    @State var highlightPeak: Bool = false
     
-    var data: [BallmerDataPoint] {
+    var data: BallmerProgrammer {
         switch selectedProgrammer {
         case .ballmer:
-            return ballmerData
+            return ballmer
         case .bolella:
-            return bolellaData
+            return bolella
         }
     }
     
-    var body: some View {
-        Chart(data) { ballmerDataPoint in
-            switch selectedChartStyle {
-            case .bar:
-                BarMark(
-                    x: .value("BAC", ballmerDataPoint.bac),
-                    y: .value("Programming Skill", ballmerDataPoint.skill))
-            case .line:
-                LineMark(
-                    x: .value("BAC", ballmerDataPoint.bac),
-                    y: .value("Programming Skill", ballmerDataPoint.skill))
-            case .area:
-                AreaMark(
-                    x: .value("BAC", ballmerDataPoint.bac),
-                    y: .value("Programming Skill", ballmerDataPoint.skill))
-            case .point:
-                PointMark(
-                    x: .value("BAC", ballmerDataPoint.bac),
-                    y: .value("Programming Skill", ballmerDataPoint.skill))
-            }
-            if(showPoint){
-                PointMark(
-                    x: .value("BAC", ballmerDataPoint.bac),
-                    y: .value("Programming Skill", ballmerDataPoint.skill))
-            }
+    var peakBAC: Double {
+        let peakDataPoint = data.data.first { ballmerDataPoint in
+            ballmerDataPoint.isPeak
         }
-        .aspectRatio(contentMode: .fit)
+        return peakDataPoint!.bac
+    }
+    
+    var body: some View {
+        VStack {
+            Chart(data.data) { ballmerDataPoint in
+                switch selectedChartStyle {
+                case .bar:
+                    BarMark(
+                        x: .value("BAC", ballmerDataPoint.bac),
+                        y: .value("Programming Skill", ballmerDataPoint.skill))
+                    .foregroundStyle(ballmerDataPoint.isPeak && highlightPeak ?
+                        .orange : .blue)
+                case .line:
+                    LineMark(
+                        x: .value("BAC", ballmerDataPoint.bac),
+                        y: .value("Programming Skill", ballmerDataPoint.skill))
+                    .interpolationMethod(.catmullRom)
+                case .area:
+                    AreaMark(
+                        x: .value("BAC", ballmerDataPoint.bac),
+                        y: .value("Programming Skill", ballmerDataPoint.skill))
+                case .point:
+                    PointMark(
+                        x: .value("BAC", ballmerDataPoint.bac),
+                        y: .value("Programming Skill", ballmerDataPoint.skill))
+                }
+                if showPoint {
+                    PointMark(
+                        x: .value("BAC", ballmerDataPoint.bac),
+                        y: .value("Programming Skill", ballmerDataPoint.skill))
+                    .foregroundStyle(ballmerDataPoint.isPeak && highlightPeak ?
+                        .orange : .blue)
+                }
+                if highlightPeak {
+                    RuleMark(x: .value("Peak", peakBAC))
+                        .foregroundStyle(.orange)
+                }
+            }
+            .aspectRatio(contentMode: .fit)
+            
+            Toggle(isOn: $highlightPeak) {
+                Text("Peak Performance")
+                Spacer()
+                Text(peakBAC.description)
+            }
+            .toggleStyle(.button)
+        }
     }
 }
 
@@ -127,6 +166,7 @@ struct MultiBallmerChartView: View {
     let selectedProgrammer: Programmer
     let selectedChartStyle: ChartStyle
     let showPoint: Bool
+    @State var highlightPeak: Bool = false
     
     var data: [BallmerDataPoint] {
         switch selectedProgrammer {
@@ -151,6 +191,7 @@ struct MultiBallmerChartView: View {
                         x: .value("BAC", ballmerDataPoint.bac),
                         y: .value("Programming Skill", ballmerDataPoint.skill))
                     .foregroundStyle(by: .value("Programmer", ballmerProgrammer.name))
+                    .interpolationMethod(.catmullRom)
                 case .area:
                     AreaMark(
                         x: .value("BAC", ballmerDataPoint.bac),
@@ -161,16 +202,29 @@ struct MultiBallmerChartView: View {
                         x: .value("BAC", ballmerDataPoint.bac),
                         y: .value("Programming Skill", ballmerDataPoint.skill))
                     .foregroundStyle(by: .value("Programmer", ballmerProgrammer.name))
+                    .symbol(by: .value("Programmer", ballmerProgrammer.name))
                 }
-                if(showPoint){
+                if showPoint {
                     PointMark(
                         x: .value("BAC", ballmerDataPoint.bac),
                         y: .value("Programming Skill", ballmerDataPoint.skill))
+                    .foregroundStyle(by: .value("Programmer", ballmerProgrammer.name))
+                    .symbol(by: .value("Programmer", ballmerProgrammer.name))
                 }
             }
             
+            if highlightPeak {
+                RuleMark(x: .value("Peak", ballmerProgrammer.peakBAC))
+                    .foregroundStyle(.orange)
+//                    .foregroundStyle(by: .value("Programmer", ballmerProgrammer.name))
+            }
         }
         .aspectRatio(contentMode: .fit)
+        
+        Toggle(isOn: $highlightPeak) {
+            Text("Highlight Peak Performances")
+        }
+        .toggleStyle(.button)
     }
 }
 

@@ -10,8 +10,22 @@ import Foundation
 struct BallmerDataPoint: Identifiable {
     var skill: Double
     var bac: Double
+    var isPeak: Bool { skill == 100.0 }
     
     var id: Double { bac }
+}
+
+struct BallmerProgrammer: Identifiable {
+    var name: String
+    var data: [BallmerDataPoint]
+    var peakBAC: Double {
+        let peakDataPoint = data.first { ballmerDataPoint in
+            ballmerDataPoint.isPeak
+        }
+        return peakDataPoint!.bac
+    }
+    
+    var id: String { name }
 }
 
 var ballmerData = [
@@ -48,14 +62,10 @@ var bolellaData = [
     BallmerDataPoint(skill: 1.0, bac: 0.26)
 ]
 
-struct BallmerProgrammer: Identifiable {
-    var name: String
-    var data: [BallmerDataPoint]
-    
-    var id: String { name }
-}
+var ballmer = BallmerProgrammer(name: "Ballmer", data: ballmerData)
+var bolella = BallmerProgrammer(name: "Bolella", data: bolellaData)
 
 var ballmerProgrammers: [BallmerProgrammer] = [
-    BallmerProgrammer(name: "Ballmer", data: ballmerData),
-    BallmerProgrammer(name: "Bolella", data: bolellaData)
+    ballmer,
+    bolella
 ]
