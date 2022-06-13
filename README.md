@@ -7,6 +7,9 @@ A simple repo that contains an Xcode 14 project with various demos and sketches 
 
 - Charts Demo using sample data and multiple toggles
 
+## Demo
+
+![](https://github.com/dbolella/WWDCFun/blob/main/ChartDemo.gif)
 
 ## Installation
 

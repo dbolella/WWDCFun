@@ -42,11 +42,13 @@ struct BarDemoView: View {
                     Text("Multi").tag(ViewStyle.multi)
                 }
                 .pickerStyle(.segmented)
-                Picker("Programmer", selection: $selectedProgrammer.animation(.easeInOut)) {
-                    Text("Ballmer").tag(Programmer.ballmer)
-                    Text("Bolella").tag(Programmer.bolella)
+                if selectedViewStyle == .single {
+                    Picker("Programmer", selection: $selectedProgrammer.animation(.easeInOut)) {
+                        Text("Ballmer").tag(Programmer.ballmer)
+                        Text("Bolella").tag(Programmer.bolella)
+                    }
+                    .pickerStyle(.segmented)
                 }
-                .pickerStyle(.segmented)
                 Picker("Chart Style", selection: $selectedChartStyle.animation(.easeInOut)) {
                     Text("Bar").tag(ChartStyle.bar)
                     Text("Line").tag(ChartStyle.line)
@@ -61,6 +63,7 @@ struct BarDemoView: View {
                     .toggleStyle(.button)
                 }
             }
+            Spacer()
             GroupBox("Ballmer's Peak 🍺") {
                 switch selectedViewStyle {
                 case .single:
@@ -73,20 +76,7 @@ struct BarDemoView: View {
                                            showPoint: showPoint)
                 }
             }
-//            VStack {
-//                Text("🍺 Ballmer's Peak 🍺")
-//                    .font(.title)
-//                switch selectedViewStyle {
-//                case .single:
-//                    SingleBallmerChartView(selectedProgrammer: selectedProgrammer,
-//                                           selectedChartStyle: selectedChartStyle,
-//                                           showPoint: showPoint)
-//                case .multi:
-//                    MultiBallmerChartView(selectedProgrammer: selectedProgrammer,
-//                                           selectedChartStyle: selectedChartStyle,
-//                                           showPoint: showPoint)
-//                }
-//            }
+            Spacer()
         }
         .padding(.all)
     }
