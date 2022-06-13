@@ -97,6 +97,7 @@ struct SingleBallmerChartView: View {
     let selectedProgrammer: Programmer
     let selectedChartStyle: ChartStyle
     let showPoint: Bool
+    @State var showHydration: Bool = false
     @State var highlightPeak: Bool = false
     
     var data: BallmerProgrammer {
@@ -126,6 +127,13 @@ struct SingleBallmerChartView: View {
                     .foregroundStyle(ballmerDataPoint.isPeak && highlightPeak ?
                         .orange : .blue)
                 case .line:
+                    if showHydration {
+                        BarMark(
+                            x: .value("BAC", ballmerDataPoint.bac),
+                            yStart: .value("Programming Skill", ballmerDataPoint.skill - 10),
+                            yEnd: .value("Programming Skill", ballmerDataPoint.skill + 10))
+                        .opacity(0.3)
+                    }
                     LineMark(
                         x: .value("BAC", ballmerDataPoint.bac),
                         y: .value("Programming Skill", ballmerDataPoint.skill))
@@ -152,7 +160,7 @@ struct SingleBallmerChartView: View {
                 }
             }
             
-            VStack {
+            HStack {
                 Toggle(isOn: $highlightPeak) {
                     Text("Peak Performance")
                     Spacer()
@@ -161,6 +169,16 @@ struct SingleBallmerChartView: View {
                 .toggleStyle(.button)
                 .background(.orange.opacity(0.2))
                 .cornerRadius(5.0)
+                if selectedChartStyle == .line {
+                    Toggle(isOn: $showHydration) {
+                        Text("Show Hydration")
+                        Spacer()
+                        Text("+/- 10")
+                    }
+                    .toggleStyle(.button)
+                    .background(.orange.opacity(0.2))
+                    .cornerRadius(5.0)
+                }
             }
         }
     }
@@ -170,6 +188,7 @@ struct MultiBallmerChartView: View {
     let selectedProgrammer: Programmer
     let selectedChartStyle: ChartStyle
     let showPoint: Bool
+    @State var showHydration: Bool = false
     @State var highlightPeak: Bool = false
     
     var body: some View {
@@ -182,6 +201,14 @@ struct MultiBallmerChartView: View {
                         y: .value("Programming Skill", ballmerDataPoint.skill))
                     .foregroundStyle(by: .value("Programmer", ballmerProgrammer.name))
                 case .line:
+                    if showHydration {
+                        BarMark(
+                            x: .value("BAC", ballmerDataPoint.bac),
+                            yStart: .value("Programming Skill", ballmerDataPoint.skill - 10),
+                            yEnd: .value("Programming Skill", ballmerDataPoint.skill + 10))
+                        .foregroundStyle(by: .value("Programmer", ballmerProgrammer.name))
+                        .opacity(0.3)
+                    }
                     LineMark(
                         x: .value("BAC", ballmerDataPoint.bac),
                         y: .value("Programming Skill", ballmerDataPoint.skill))
@@ -215,12 +242,24 @@ struct MultiBallmerChartView: View {
         }
         .aspectRatio(contentMode: .fit)
         
-        Toggle(isOn: $highlightPeak) {
-            Text("Highlight Peak Performances")
+        HStack {
+            Toggle(isOn: $highlightPeak) {
+                Text("Highlight Peak Performances")
+            }
+            .toggleStyle(.button)
+            .background(.orange.opacity(0.2))
+            .cornerRadius(5.0)
+            if selectedChartStyle == .line {
+                Toggle(isOn: $showHydration) {
+                    Text("Show Hydration")
+                    Spacer()
+                    Text("+/- 10")
+                }
+                .toggleStyle(.button)
+                .background(.orange.opacity(0.2))
+                .cornerRadius(5.0)
+            }
         }
-        .toggleStyle(.button)
-        .background(.orange.opacity(0.2))
-        .cornerRadius(5.0)
     }
 }
 
