@@ -35,50 +35,61 @@ struct BarDemoView: View {
     }
     
     var body: some View {
-        VStack(spacing: 50.0) {
-            VStack {
-                Picker("View Style", selection: $selectedViewStyle.animation(.easeInOut)) {
-                    Text("Single").tag(ViewStyle.single)
-                    Text("Multi").tag(ViewStyle.multi)
-                }
-                .pickerStyle(.segmented)
-                if selectedViewStyle == .single {
-                    Picker("Programmer", selection: $selectedProgrammer.animation(.easeInOut)) {
-                        Text("Ballmer").tag(Programmer.ballmer)
-                        Text("Bolella").tag(Programmer.bolella)
-                    }
-                    .pickerStyle(.segmented)
-                }
-                Picker("Chart Style", selection: $selectedChartStyle.animation(.easeInOut)) {
-                    Text("Bar").tag(ChartStyle.bar)
-                    Text("Line").tag(ChartStyle.line)
-                    Text("Area").tag(ChartStyle.area)
-                    Text("Point").tag(ChartStyle.point)
-                }
-                .pickerStyle(.segmented)
-                if(isPointNotSelected){
-                    Toggle(isOn: $pointOn.animation()) {
-                        Text("PointMark")
-                    }
-                    .toggleStyle(.button)
-                }
+        NavigationStack {
+            VStack(spacing: 50.0) {
+                SelectedChartView
+                ChartOptions
             }
-            Spacer()
-            GroupBox("Ballmer's Peak 🍺") {
-                switch selectedViewStyle {
-                case .single:
-                    SingleBallmerChartView(selectedProgrammer: selectedProgrammer,
-                                           selectedChartStyle: selectedChartStyle,
-                                           showPoint: showPoint)
-                case .multi:
-                    MultiBallmerChartView(selectedProgrammer: selectedProgrammer,
-                                           selectedChartStyle: selectedChartStyle,
-                                           showPoint: showPoint)
-                }
-            }
-            Spacer()
+            .padding(.all)
+            .navigationTitle("Ballmer's Peak 🍺")
         }
-        .padding(.all)
+    }
+    
+    var SelectedChartView: some View {
+        Group {
+            switch selectedViewStyle {
+            case .single:
+                SingleBallmerChartView(selectedProgrammer: selectedProgrammer,
+                                       selectedChartStyle: selectedChartStyle,
+                                       showPoint: showPoint)
+            case .multi:
+                MultiBallmerChartView(selectedProgrammer: selectedProgrammer,
+                                       selectedChartStyle: selectedChartStyle,
+                                       showPoint: showPoint)
+            }
+        }
+    }
+    
+    var ChartOptions: some View {
+        VStack {
+            Picker("View Style", selection: $selectedViewStyle.animation(.easeInOut)) {
+                Text("Single").tag(ViewStyle.single)
+                Text("Multi").tag(ViewStyle.multi)
+            }
+            .pickerStyle(.segmented)
+            if selectedViewStyle == .single {
+                Picker("Programmer", selection: $selectedProgrammer.animation(.easeInOut)) {
+                    Text("Ballmer").tag(Programmer.ballmer)
+                    Text("Bolella").tag(Programmer.bolella)
+                }
+                .pickerStyle(.segmented)
+            }
+            Picker("Chart Style", selection: $selectedChartStyle.animation(.easeInOut)) {
+                Text("Bar").tag(ChartStyle.bar)
+                Text("Line").tag(ChartStyle.line)
+                Text("Area").tag(ChartStyle.area)
+                Text("Point").tag(ChartStyle.point)
+            }
+            .pickerStyle(.segmented)
+            if(isPointNotSelected){
+                Toggle(isOn: $pointOn.animation()) {
+                    Text("PointMark")
+                }
+                .toggleStyle(.button)
+                .background(.orange.opacity(0.2))
+                .cornerRadius(5.0)
+            }
+        }
     }
 }
 
@@ -140,14 +151,17 @@ struct SingleBallmerChartView: View {
                         .foregroundStyle(.orange)
                 }
             }
-            .aspectRatio(contentMode: .fit)
             
-            Toggle(isOn: $highlightPeak) {
-                Text("Peak Performance")
-                Spacer()
-                Text(peakBAC.description)
+            VStack {
+                Toggle(isOn: $highlightPeak) {
+                    Text("Peak Performance")
+                    Spacer()
+                    Text(peakBAC.description)
+                }
+                .toggleStyle(.button)
+                .background(.orange.opacity(0.2))
+                .cornerRadius(5.0)
             }
-            .toggleStyle(.button)
         }
     }
 }
@@ -157,15 +171,6 @@ struct MultiBallmerChartView: View {
     let selectedChartStyle: ChartStyle
     let showPoint: Bool
     @State var highlightPeak: Bool = false
-    
-    var data: [BallmerDataPoint] {
-        switch selectedProgrammer {
-        case .ballmer:
-            return ballmerData
-        case .bolella:
-            return bolellaData
-        }
-    }
     
     var body: some View {
         Chart(ballmerProgrammers) { ballmerProgrammer in
@@ -206,7 +211,6 @@ struct MultiBallmerChartView: View {
             if highlightPeak {
                 RuleMark(x: .value("Peak", ballmerProgrammer.peakBAC))
                     .foregroundStyle(.orange)
-//                    .foregroundStyle(by: .value("Programmer", ballmerProgrammer.name))
             }
         }
         .aspectRatio(contentMode: .fit)
@@ -215,6 +219,8 @@ struct MultiBallmerChartView: View {
             Text("Highlight Peak Performances")
         }
         .toggleStyle(.button)
+        .background(.orange.opacity(0.2))
+        .cornerRadius(5.0)
     }
 }
 
