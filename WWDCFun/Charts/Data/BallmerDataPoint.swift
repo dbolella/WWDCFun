@@ -26,6 +26,13 @@ struct BallmerProgrammer: Identifiable {
     }
     
     var id: String { name }
+    
+    func skillForBAC(_ bac: Double) -> Double {
+        let bdpForBAC = data.first { bdp in
+            bdp.bac == bac
+        }
+        return bdpForBAC!.skill
+    }
 }
 
 var ballmerData = [

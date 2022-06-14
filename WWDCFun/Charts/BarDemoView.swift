@@ -34,14 +34,29 @@ struct BarDemoView: View {
         isPointNotSelected && pointOn
     }
     
+    var data: BallmerProgrammer {
+        switch selectedProgrammer {
+        case .ballmer:
+            return ballmer
+        case .bolella:
+            return bolella
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 50.0) {
-                SelectedChartView
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Text("Ballmer's Peak 🍺")
+                    }
+                    SelectedChartView
+                }
                 ChartOptions
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding(.all)
-            .navigationTitle("Ballmer's Peak 🍺")
+            .navigationTitle("Charts Demo")
         }
     }
     
@@ -49,13 +64,13 @@ struct BarDemoView: View {
         Group {
             switch selectedViewStyle {
             case .single:
-                SingleBallmerChartView(selectedProgrammer: selectedProgrammer,
-                                       selectedChartStyle: selectedChartStyle,
-                                       showPoint: showPoint)
+                SingleBallmerChartView(selectedChartStyle: selectedChartStyle,
+                                       showPoint: showPoint,
+                                       data: data)
             case .multi:
-                MultiBallmerChartView(selectedProgrammer: selectedProgrammer,
-                                       selectedChartStyle: selectedChartStyle,
-                                       showPoint: showPoint)
+                MultiBallmerChartView(selectedChartStyle: selectedChartStyle,
+                                      showPoint: showPoint,
+                                      data: ballmerProgrammers)
             }
         }
     }
@@ -84,176 +99,6 @@ struct BarDemoView: View {
             if(isPointNotSelected){
                 Toggle(isOn: $pointOn.animation()) {
                     Text("PointMark")
-                }
-                .toggleStyle(.button)
-                .background(.orange.opacity(0.2))
-                .cornerRadius(5.0)
-            }
-        }
-    }
-}
-
-struct SingleBallmerChartView: View {
-    let selectedProgrammer: Programmer
-    let selectedChartStyle: ChartStyle
-    let showPoint: Bool
-    @State var showHydration: Bool = false
-    @State var highlightPeak: Bool = false
-    
-    var data: BallmerProgrammer {
-        switch selectedProgrammer {
-        case .ballmer:
-            return ballmer
-        case .bolella:
-            return bolella
-        }
-    }
-    
-    var peakBAC: Double {
-        let peakDataPoint = data.data.first { ballmerDataPoint in
-            ballmerDataPoint.isPeak
-        }
-        return peakDataPoint!.bac
-    }
-    
-    var body: some View {
-        VStack {
-            Chart(data.data) { ballmerDataPoint in
-                switch selectedChartStyle {
-                case .bar:
-                    BarMark(
-                        x: .value("BAC", ballmerDataPoint.bac),
-                        y: .value("Programming Skill", ballmerDataPoint.skill))
-                    .foregroundStyle(ballmerDataPoint.isPeak && highlightPeak ?
-                        .orange : .blue)
-                case .line:
-                    if showHydration {
-                        BarMark(
-                            x: .value("BAC", ballmerDataPoint.bac),
-                            yStart: .value("Programming Skill", ballmerDataPoint.skill - 10),
-                            yEnd: .value("Programming Skill", ballmerDataPoint.skill + 10))
-                        .opacity(0.3)
-                    }
-                    LineMark(
-                        x: .value("BAC", ballmerDataPoint.bac),
-                        y: .value("Programming Skill", ballmerDataPoint.skill))
-                    .interpolationMethod(.catmullRom)
-                case .area:
-                    AreaMark(
-                        x: .value("BAC", ballmerDataPoint.bac),
-                        y: .value("Programming Skill", ballmerDataPoint.skill))
-                case .point:
-                    PointMark(
-                        x: .value("BAC", ballmerDataPoint.bac),
-                        y: .value("Programming Skill", ballmerDataPoint.skill))
-                }
-                if showPoint {
-                    PointMark(
-                        x: .value("BAC", ballmerDataPoint.bac),
-                        y: .value("Programming Skill", ballmerDataPoint.skill))
-                    .foregroundStyle(ballmerDataPoint.isPeak && highlightPeak ?
-                        .orange : .blue)
-                }
-                if highlightPeak {
-                    RuleMark(x: .value("Peak", peakBAC))
-                        .foregroundStyle(.orange)
-                }
-            }
-            
-            HStack {
-                Toggle(isOn: $highlightPeak) {
-                    Text("Peak Performance")
-                    Spacer()
-                    Text(peakBAC.description)
-                }
-                .toggleStyle(.button)
-                .background(.orange.opacity(0.2))
-                .cornerRadius(5.0)
-                if selectedChartStyle == .line {
-                    Toggle(isOn: $showHydration) {
-                        Text("Show Hydration")
-                        Spacer()
-                        Text("+/- 10")
-                    }
-                    .toggleStyle(.button)
-                    .background(.orange.opacity(0.2))
-                    .cornerRadius(5.0)
-                }
-            }
-        }
-    }
-}
-
-struct MultiBallmerChartView: View {
-    let selectedProgrammer: Programmer
-    let selectedChartStyle: ChartStyle
-    let showPoint: Bool
-    @State var showHydration: Bool = false
-    @State var highlightPeak: Bool = false
-    
-    var body: some View {
-        Chart(ballmerProgrammers) { ballmerProgrammer in
-            ForEach(ballmerProgrammer.data) { ballmerDataPoint in
-                switch selectedChartStyle {
-                case .bar:
-                    BarMark(
-                        x: .value("BAC", ballmerDataPoint.bac),
-                        y: .value("Programming Skill", ballmerDataPoint.skill))
-                    .foregroundStyle(by: .value("Programmer", ballmerProgrammer.name))
-                case .line:
-                    if showHydration {
-                        BarMark(
-                            x: .value("BAC", ballmerDataPoint.bac),
-                            yStart: .value("Programming Skill", ballmerDataPoint.skill - 10),
-                            yEnd: .value("Programming Skill", ballmerDataPoint.skill + 10))
-                        .foregroundStyle(by: .value("Programmer", ballmerProgrammer.name))
-                        .opacity(0.3)
-                    }
-                    LineMark(
-                        x: .value("BAC", ballmerDataPoint.bac),
-                        y: .value("Programming Skill", ballmerDataPoint.skill))
-                    .foregroundStyle(by: .value("Programmer", ballmerProgrammer.name))
-                    .interpolationMethod(.catmullRom)
-                case .area:
-                    AreaMark(
-                        x: .value("BAC", ballmerDataPoint.bac),
-                        y: .value("Programming Skill", ballmerDataPoint.skill))
-                    .foregroundStyle(by: .value("Programmer", ballmerProgrammer.name))
-                case .point:
-                    PointMark(
-                        x: .value("BAC", ballmerDataPoint.bac),
-                        y: .value("Programming Skill", ballmerDataPoint.skill))
-                    .foregroundStyle(by: .value("Programmer", ballmerProgrammer.name))
-                    .symbol(by: .value("Programmer", ballmerProgrammer.name))
-                }
-                if showPoint {
-                    PointMark(
-                        x: .value("BAC", ballmerDataPoint.bac),
-                        y: .value("Programming Skill", ballmerDataPoint.skill))
-                    .foregroundStyle(by: .value("Programmer", ballmerProgrammer.name))
-                    .symbol(by: .value("Programmer", ballmerProgrammer.name))
-                }
-            }
-            
-            if highlightPeak {
-                RuleMark(x: .value("Peak", ballmerProgrammer.peakBAC))
-                    .foregroundStyle(.orange)
-            }
-        }
-        .aspectRatio(contentMode: .fit)
-        
-        HStack {
-            Toggle(isOn: $highlightPeak) {
-                Text("Highlight Peak Performances")
-            }
-            .toggleStyle(.button)
-            .background(.orange.opacity(0.2))
-            .cornerRadius(5.0)
-            if selectedChartStyle == .line {
-                Toggle(isOn: $showHydration) {
-                    Text("Show Hydration")
-                    Spacer()
-                    Text("+/- 10")
                 }
                 .toggleStyle(.button)
                 .background(.orange.opacity(0.2))
