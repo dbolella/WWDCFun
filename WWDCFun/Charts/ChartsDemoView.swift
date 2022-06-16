@@ -24,7 +24,7 @@ struct ChartsDemoView: View {
     @State var selectedViewStyle: ViewStyle = .single
     @State var selectedChartStyle: ChartStyle = .bar
     @State var selectedProgrammer: Programmer = .ballmer
-    @State var pointOn: Bool = true
+    @State var pointOn: Bool = false
     
     var isPointNotSelected: Bool {
         selectedChartStyle != .point
@@ -46,7 +46,7 @@ struct ChartsDemoView: View {
     var body: some View {
         VStack(spacing: 50.0) {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Ballmer's Peak 🍺")
+                Text("Ballmer Peak 🍺")
                 SelectedChartView
             }
             ChartOptions

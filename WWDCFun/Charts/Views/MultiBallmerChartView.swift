@@ -73,54 +73,52 @@ struct MultiBallmerChartView: View {
                     .foregroundStyle(.orange)
             }
             if let lollipopValue {
-                    RuleMark(x: .value("Current Value", lollipopValue))
-                        .foregroundStyle(.pink)
-                        .lineStyle(.init(dash: [2], dashPhase: 5))
-                        .annotation(position: .trailing) {
-                            VStack(alignment: .leading) {
-                                Text((String(format: "Skills at BAC: %.2f", lollipopValue)))
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                                ProgrammerSkillsText
-                            }
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 4)
-                            .background {
-                                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                    .fill(.white.shadow(.drop(radius: 1)))
-                            }
+                RuleMark(x: .value("Current Value", lollipopValue))
+                    .foregroundStyle(.pink)
+                    .lineStyle(.init(dash: [2], dashPhase: 5))
+                    .annotation(position: .trailing) {
+                        VStack(alignment: .leading) {
+                            Text((String(format: "Skills at BAC: %.2f", lollipopValue)))
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            ProgrammerSkillsText
                         }
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .background {
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .fill(.white.shadow(.drop(radius: 1)))
+                        }
+                    }
             }
         }
         .chartOverlay { proxy in
-            GeometryReader { geoProxy in
-                Rectangle()
-                    .fill(.clear).contentShape(Rectangle())
-                    .gesture(
-                        DragGesture()
-                            .onChanged { value in
-                                let location = value.location
-                                if let bac: Double = proxy.value(atX: location.x) {
-                                    let evenBAC = Double((Int(bac * 100.0) / 2) * 2) / 100.0
-                                    lollipopValue = evenBAC
-                                }
+            Rectangle()
+                .fill(.clear).contentShape(Rectangle())
+                .gesture(
+                    DragGesture()
+                        .onChanged { value in
+                            let location = value.location
+                            if let bac: Double = proxy.value(atX: location.x) {
+                                let evenBAC = Double((Int(bac * 100.0) / 2) * 2) / 100.0
+                                lollipopValue = evenBAC
                             }
-                            .onEnded { value in
-                                lollipopValue = nil
-                            }
-                    )
-            }
+                        }
+                        .onEnded { value in
+                            lollipopValue = nil
+                        }
+                )
         }
         
         HStack {
-            Toggle(isOn: $highlightPeak) {
+            Toggle(isOn: $highlightPeak.animation()) {
                 Text("Highlight Peak Performances")
             }
             .toggleStyle(.button)
             .background(.orange.opacity(0.2))
             .cornerRadius(5.0)
             if selectedChartStyle == .line {
-                Toggle(isOn: $showHydration) {
+                Toggle(isOn: $showHydration.animation()) {
                     Text("Show Hydration")
                     Spacer()
                     Text("+/- 10")
