@@ -20,7 +20,7 @@ enum ChartStyle {
     case bar, line, area, point
 }
 
-struct BarDemoView: View {
+struct ChartsDemoView: View {
     @State var selectedViewStyle: ViewStyle = .single
     @State var selectedChartStyle: ChartStyle = .bar
     @State var selectedProgrammer: Programmer = .ballmer
@@ -44,20 +44,16 @@ struct BarDemoView: View {
     }
     
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 50.0) {
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack {
-                        Text("Ballmer's Peak 🍺")
-                    }
-                    SelectedChartView
-                }
-                ChartOptions
+        VStack(spacing: 50.0) {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Ballmer's Peak 🍺")
+                SelectedChartView
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .padding(.all)
-            .navigationTitle("Charts Demo")
+            ChartOptions
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .padding(.all)
+        .navigationTitle("Charts Demo")
     }
     
     var SelectedChartView: some View {
@@ -110,6 +106,6 @@ struct BarDemoView: View {
 
 struct BarDemoView_Previews: PreviewProvider {
     static var previews: some View {
-        BarDemoView()
+        ChartsDemoView()
     }
 }

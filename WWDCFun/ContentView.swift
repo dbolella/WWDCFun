@@ -9,8 +9,26 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            BarDemoView()
+        NavigationStack {
+            VStack(spacing: 100.0) {
+                Text("WWDC22 Fun 🎉")
+                    .font(.largeTitle.bold())
+                VStack(spacing: 50.0) {
+                    NavigationLink {
+                        ChartsDemoView()
+                    } label: {
+                        Label("Charts Demo", systemImage: "chart.bar.xaxis")
+                            .font(.title)
+                    }
+                    NavigationLink {
+                        GaugeDemoView()
+                    } label: {
+                        Label("Gauge Demo", systemImage: "gauge")
+                            .font(.title)
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
     }
 }

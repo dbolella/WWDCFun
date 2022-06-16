@@ -9,23 +9,25 @@
 /* Begin PBXBuildFile section */
 		0A2047312858E6F900FA0C49 /* SingleBallmerChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2047302858E6F900FA0C49 /* SingleBallmerChartView.swift */; };
 		0A2047332858E77600FA0C49 /* MultiBallmerChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2047322858E77600FA0C49 /* MultiBallmerChartView.swift */; };
+		0A2047362858ED2A00FA0C49 /* GaugeDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2047352858ED2A00FA0C49 /* GaugeDemoView.swift */; };
 		0A4C456628524D1E0097F7F1 /* WWDCFunApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4C456528524D1E0097F7F1 /* WWDCFunApp.swift */; };
 		0A4C456828524D1E0097F7F1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4C456728524D1E0097F7F1 /* ContentView.swift */; };
 		0A4C456A28524D1F0097F7F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A4C456928524D1F0097F7F1 /* Assets.xcassets */; };
 		0A4C456D28524D1F0097F7F1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A4C456C28524D1F0097F7F1 /* Preview Assets.xcassets */; };
-		0AA739D7285515B000AAC46D /* BarDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA739D6285515B000AAC46D /* BarDemoView.swift */; };
+		0AA739D7285515B000AAC46D /* ChartsDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA739D6285515B000AAC46D /* ChartsDemoView.swift */; };
 		0AA739DA28554E6700AAC46D /* BallmerDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA739D928554E6700AAC46D /* BallmerDataPoint.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0A2047302858E6F900FA0C49 /* SingleBallmerChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleBallmerChartView.swift; sourceTree = "<group>"; };
 		0A2047322858E77600FA0C49 /* MultiBallmerChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiBallmerChartView.swift; sourceTree = "<group>"; };
+		0A2047352858ED2A00FA0C49 /* GaugeDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaugeDemoView.swift; sourceTree = "<group>"; };
 		0A4C456228524D1E0097F7F1 /* WWDCFun.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCFun.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A4C456528524D1E0097F7F1 /* WWDCFunApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCFunApp.swift; sourceTree = "<group>"; };
 		0A4C456728524D1E0097F7F1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0A4C456928524D1F0097F7F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0A4C456C28524D1F0097F7F1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		0AA739D6285515B000AAC46D /* BarDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarDemoView.swift; sourceTree = "<group>"; };
+		0AA739D6285515B000AAC46D /* ChartsDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsDemoView.swift; sourceTree = "<group>"; };
 		0AA739D928554E6700AAC46D /* BallmerDataPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallmerDataPoint.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -49,6 +51,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		0A2047342858ECC800FA0C49 /* Gauge */ = {
+			isa = PBXGroup;
+			children = (
+				0A2047352858ED2A00FA0C49 /* GaugeDemoView.swift */,
+			);
+			path = Gauge;
+			sourceTree = "<group>";
+		};
 		0A4C455928524D1E0097F7F1 = {
 			isa = PBXGroup;
 			children = (
@@ -68,6 +78,7 @@
 		0A4C456428524D1E0097F7F1 /* WWDCFun */ = {
 			isa = PBXGroup;
 			children = (
+				0A2047342858ECC800FA0C49 /* Gauge */,
 				0AA739D32855156700AAC46D /* Navigation */,
 				0AA739D22855156000AAC46D /* Charts */,
 				0A4C456528524D1E0097F7F1 /* WWDCFunApp.swift */,
@@ -91,7 +102,7 @@
 			children = (
 				0A20472F2858E6E700FA0C49 /* Views */,
 				0AA739D828554E3300AAC46D /* Data */,
-				0AA739D6285515B000AAC46D /* BarDemoView.swift */,
+				0AA739D6285515B000AAC46D /* ChartsDemoView.swift */,
 			);
 			path = Charts;
 			sourceTree = "<group>";
@@ -182,9 +193,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				0A4C456828524D1E0097F7F1 /* ContentView.swift in Sources */,
-				0AA739D7285515B000AAC46D /* BarDemoView.swift in Sources */,
+				0AA739D7285515B000AAC46D /* ChartsDemoView.swift in Sources */,
 				0AA739DA28554E6700AAC46D /* BallmerDataPoint.swift in Sources */,
 				0A4C456628524D1E0097F7F1 /* WWDCFunApp.swift in Sources */,
+				0A2047362858ED2A00FA0C49 /* GaugeDemoView.swift in Sources */,
 				0A2047312858E6F900FA0C49 /* SingleBallmerChartView.swift in Sources */,
 				0A2047332858E77600FA0C49 /* MultiBallmerChartView.swift in Sources */,
 			);

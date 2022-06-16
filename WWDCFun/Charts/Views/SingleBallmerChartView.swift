@@ -136,6 +136,19 @@ struct SingleBallmerChartView_Previews: PreviewProvider {
     static var previews: some View {
         SingleBallmerChartView(selectedChartStyle: .bar,
                                showPoint: true,
-                               data: bolella)
+                               data: ballmer)
+        .previewDisplayName("Single: Bar")
+        SingleBallmerChartView(selectedChartStyle: .line,
+                               showPoint: true,
+                               data: ballmer)
+        .previewDisplayName("Single: Line")
+        SingleBallmerChartView(selectedChartStyle: .area,
+                               showPoint: true,
+                               data: ballmer)
+        .previewDisplayName("Single: Area")
+        SingleBallmerChartView(selectedChartStyle: .point,
+                               showPoint: true,
+                               data: ballmer)
+        .previewDisplayName("Single: Point")
     }
 }

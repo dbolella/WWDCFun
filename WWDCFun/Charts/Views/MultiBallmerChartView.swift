@@ -138,5 +138,22 @@ struct MultiBallmerChartView_Previews: PreviewProvider {
         MultiBallmerChartView(selectedChartStyle: .bar,
                               showPoint: true,
                               data: ballmerProgrammers)
+        .previewDisplayName("Multi: Bar")
+        .padding(.all)
+        MultiBallmerChartView(selectedChartStyle: .line,
+                              showPoint: true,
+                              data: ballmerProgrammers)
+        .previewDisplayName("Multi: Line")
+        .padding(.all)
+        MultiBallmerChartView(selectedChartStyle: .area,
+                              showPoint: true,
+                              data: ballmerProgrammers)
+        .previewDisplayName("Multi: Area")
+        .padding(.all)
+        MultiBallmerChartView(selectedChartStyle: .point,
+                              showPoint: true,
+                              data: ballmerProgrammers)
+        .previewDisplayName("Multi: Point")
+        .padding(.all)
     }
 }
